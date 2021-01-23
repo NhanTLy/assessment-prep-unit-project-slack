@@ -1,45 +1,47 @@
-class Calendar {
-  //do something with the data here
-  constructor(schedule) {
+const renderChat = (input) => {
+	let result = '';
+	console.log(input);
+	for (let i = 0; i < input.length; i++) {
+		result += renderMessage(input[i]);
+	}
+	return result;
+};
 
-  }
-}
+const renderMessage = (message) => `
+  <ul>
+    <li>Created at: ${message.created_at}</li>
+    <li>Created by: ${message.created_by}</li>
+    <li>Message: ${message.message}</li>
+  </ul>
+`;
 
-class Event {
-  constructor(data) {
-    this.startTime = data.startTime;
-    this.endTime = data.endTime;
-    this.description = data.description;
-  }
-}
+$(document).on('ready', () => {
+	fetch('/api/')
+		.then((resp) => resp.json())
+		.then((data) => {
+			document.querySelector('.chat').innerHTML += renderChat(data.chat);
+		});
+});
 
-class Day {
-  constructor(name) {
-    this.name = name;
-    this.events = [];
-    this.addEvent = (eventData) => {
-      this.events.push(new Event(eventData));
-    }
-    this.orderEvents = () => {
-      //go through events and sort them by start and end time
-    }
-  }
-}
+const btnAction = document.getElementById('btnId');
 
-class Week {
-  constructor(number) {
-    this.days = [];
-    this.addDay = (name) => {
-      const day = new Day(name);
-      this.days.push(day);
-    }
-  }
-}
+btnAction.addEventListener('click', function (e) {
+	e.preventDefault();
 
+	const message = document.getElementById('inputId').value;
+	const createdAt = new Date().toString().slice(0, 25);
+	const createdBy = 'theGuy';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const title = document.createElement('h1');
-  title.innerText = 'Social Calendar';
-  document.querySelector('body').appendChild(title);
-  // make AJAX call here....
+	fetch('/api/send', {
+		method: 'POST',
+		body: JSON.stringify({ message, createdAt, createdBy }),
+		headers: {
+			'Content-type': 'application/json; charset=UTF-8',
+		},
+	})
+		.then((resp) => resp.json())
+		.then((data) => {
+			document.getElementById('inputId').value = '';
+			document.querySelector('.chat').innerHTML = renderChat(data.chat);
+		});
 });

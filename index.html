@@ -1,33 +1,38 @@
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Calendar</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Calendar</title>
+		<script src="./node_modules/jquery/dist/jquery.min.js"></script>
+	</head>
+	<body>
+		<div class="chat">We need react!!!!! :D</div>
+		<div>
+			<!-- <form id="formId"> -->
+			<input id="inputId" type="text" placeholder="Write a message" value="" />
+			<button type="submit" id="btnId">Send</button>
+			<!-- </form> -->
+		</div>
+	</body>
+	<script src="./node_modules/expect/umd/expect.min.js"></script>
+	<script src="./node_modules/mocha/mocha.js"></script>
+	<script src="./test/polyfill.js"></script>
+	<script src="./client/main.js"></script>
 
+	<script>
+		// If called from Mocha Phantom-JS on the command line then add the test scripts
+		// to the end of the document.
+		if (window.callPhantom) {
+			mocha.setup('bdd');
+			addScript('./test/online-calendar-test.js');
+			addScript('./test/online-chatroom-test.js');
+			addScript('./test/runMocha.js');
+		}
 
-</body>
-<script src="./node_modules/expect/umd/expect.min.js"></script>
-<script src="./node_modules/mocha/mocha.js"></script>
-<script src="./test/polyfill.js"></script>
-<script src='./client/main.js'></script>
-
-<script>
-  // If called from Mocha Phantom-JS on the command line then add the test scripts
-  // to the end of the document.
-  if (window.callPhantom) {
-    mocha.setup('bdd')
-    addScript('./test/online-calendar-test.js');
-    addScript('./test/online-chatroom-test.js');
-    addScript('./test/runMocha.js');
-  }
-  
-  function addScript(path) {
-    var js = document.createElement('script');
-    js.type = 'text/javascript';
-    js.src = path;
-    document.body.appendChild(js);
-  }
-</script>
-
+		function addScript(path) {
+			var js = document.createElement('script');
+			js.type = 'text/javascript';
+			js.src = path;
+			document.body.appendChild(js);
+		}
+	</script>
 </html>
